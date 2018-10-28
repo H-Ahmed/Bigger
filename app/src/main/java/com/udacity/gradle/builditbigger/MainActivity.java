@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.androidlibjokes.JokeActivity;
@@ -46,22 +47,4 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
-
-    public void tellJoke(View view) {
-        Jokes jokes = new Jokes();
-
-        new EndpointsAsyncTask(new EndpointsAsyncTask.AsyncResponse() {
-            @Override
-            public void processFinish(String output) {
-                Toast.makeText(MainActivity.this, output, Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(MainActivity.this, JokeActivity.class);
-                intent.putExtra(STRING_JOKE, output);
-                startActivity(intent);
-            }
-        }).execute(new Pair<Context, String>(this, jokes.getJoke()));
-
-
-    }
-
-
 }
