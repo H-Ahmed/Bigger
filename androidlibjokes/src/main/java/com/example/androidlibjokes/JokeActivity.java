@@ -1,12 +1,10 @@
 package com.example.androidlibjokes;
 
-import android.content.Context;
 import android.content.Intent;
-import android.support.v4.util.Pair;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
-import android.widget.Toast;
+
 
 import com.example.javajokes.Jokes;
 
