@@ -3,6 +3,7 @@ package com.udacity.gradle.builditbigger;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.support.v4.util.Pair;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.api.client.extensions.android.http.AndroidHttp;
@@ -15,17 +16,30 @@ import java.io.IOException;
 
 public class EndpointsAsyncTask extends AsyncTask<Pair<Context, String>, Void, String> {
 
+    public interface AsyncRequest{
+        void processStart();
+    }
+    public AsyncRequest mStart = null;
+
     public interface AsyncResponse{
         void processFinish(String output);
     }
     public AsyncResponse mDelegate = null;
-    EndpointsAsyncTask(AsyncResponse delegate){
+
+    EndpointsAsyncTask(AsyncResponse delegate, AsyncRequest start){
         mDelegate = delegate;
+        mStart = start;
     }
 
 
     private static MyApi myApiService = null;
     private Context context;
+
+    @Override
+    protected void onPreExecute() {
+        super.onPreExecute();
+        mStart.processStart();
+    }
 
     @Override
     protected String doInBackground(Pair<Context, String>... params) {

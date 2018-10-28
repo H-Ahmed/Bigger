@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.androidlibjokes.JokeActivity;
@@ -25,6 +26,7 @@ public class MainActivityFragment extends Fragment {
 
     private static final String STRING_JOKE = "string_joke";
     private InterstitialAd mInterstitialAd;
+    private ProgressBar spinner;
 
     public MainActivityFragment() {
     }
@@ -36,7 +38,7 @@ public class MainActivityFragment extends Fragment {
         mInterstitialAd = new InterstitialAd(getContext());
         mInterstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712");
         mInterstitialAd.loadAd(new AdRequest.Builder().build());
-        mInterstitialAd.setAdListener(new AdListener(){
+        mInterstitialAd.setAdListener(new AdListener() {
             @Override
             public void onAdFailedToLoad(int i) {
                 super.onAdFailedToLoad(i);
@@ -57,8 +59,8 @@ public class MainActivityFragment extends Fragment {
         });
 
         View root = inflater.inflate(R.layout.fragment_main, container, false);
-
-        Button mButton = (Button) root.findViewById(R.id.joke_button) ;
+        spinner = root.findViewById(R.id.progressBar);
+        Button mButton = root.findViewById(R.id.joke_button);
         mButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -81,15 +83,21 @@ public class MainActivityFragment extends Fragment {
         return root;
     }
 
-    private void loadJoke(){
+    private void loadJoke() {
         Jokes jokes = new Jokes();
         new EndpointsAsyncTask(new EndpointsAsyncTask.AsyncResponse() {
             @Override
             public void processFinish(String output) {
+                spinner.setVisibility(View.INVISIBLE);
                 Toast.makeText(getActivity(), output, Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getActivity(), JokeActivity.class);
                 intent.putExtra(STRING_JOKE, output);
                 startActivity(intent);
+            }
+        }, new EndpointsAsyncTask.AsyncRequest() {
+            @Override
+            public void processStart() {
+                spinner.setVisibility(View.VISIBLE);
             }
         }).execute(new Pair<Context, String>(getContext(), jokes.getJoke()));
     }
