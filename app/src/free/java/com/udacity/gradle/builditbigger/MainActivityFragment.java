@@ -1,23 +1,20 @@
 package com.udacity.gradle.builditbigger;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.example.androidlibjokes.JokeActivity;
-import com.example.javajokes.Jokes;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.InterstitialAd;
+
 
 /**
  * A placeholder fragment containing a simple view.
@@ -84,12 +81,11 @@ public class MainActivityFragment extends Fragment {
     }
 
     private void loadJoke() {
-        Jokes jokes = new Jokes();
+
         new EndpointsAsyncTask(new EndpointsAsyncTask.AsyncResponse() {
             @Override
             public void processFinish(String output) {
                 spinner.setVisibility(View.INVISIBLE);
-                Toast.makeText(getActivity(), output, Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getActivity(), JokeActivity.class);
                 intent.putExtra(STRING_JOKE, output);
                 startActivity(intent);
@@ -99,6 +95,6 @@ public class MainActivityFragment extends Fragment {
             public void processStart() {
                 spinner.setVisibility(View.VISIBLE);
             }
-        }).execute(new Pair<Context, String>(getContext(), jokes.getJoke()));
+        }).execute();
     }
 }

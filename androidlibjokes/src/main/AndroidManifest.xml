@@ -3,7 +3,9 @@
     package="com.example.androidlibjokes">
 
     <application>
-        <activity android:name=".JokeActivity"></activity>
+        <activity android:name=".JokeActivity">
+
+        </activity>
     </application>
 
 </manifest>

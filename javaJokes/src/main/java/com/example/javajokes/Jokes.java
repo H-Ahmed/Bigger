@@ -2,6 +2,6 @@ package com.example.javajokes;
 
 public class Jokes {
     public String getJoke(){
-        return "Great idea for my business";
+        return "imagine that there is very funny joke here";
     }
 }

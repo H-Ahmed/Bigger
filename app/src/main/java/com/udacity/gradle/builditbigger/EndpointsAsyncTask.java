@@ -1,8 +1,7 @@
 package com.udacity.gradle.builditbigger;
 
-import android.content.Context;
 import android.os.AsyncTask;
-import android.support.v4.util.Pair;
+import android.util.Log;
 
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
@@ -12,17 +11,19 @@ import com.udacity.gradle.builditbigger.backend.myApi.MyApi;
 
 import java.io.IOException;
 
-public class EndpointsAsyncTask extends AsyncTask<Pair<Context, String>, Void, String> {
+import static android.content.ContentValues.TAG;
+
+public class EndpointsAsyncTask extends AsyncTask<Void, Void, String> {
 
     public interface AsyncRequest{
         void processStart();
     }
-    public AsyncRequest mStart = null;
+    public AsyncRequest mStart;
 
     public interface AsyncResponse{
         void processFinish(String output);
     }
-    public AsyncResponse mDelegate = null;
+    public AsyncResponse mDelegate;
 
     EndpointsAsyncTask(AsyncResponse delegate, AsyncRequest start){
         mDelegate = delegate;
@@ -31,7 +32,6 @@ public class EndpointsAsyncTask extends AsyncTask<Pair<Context, String>, Void, S
 
 
     private static MyApi myApiService = null;
-    private Context context;
 
     @Override
     protected void onPreExecute() {
@@ -40,7 +40,7 @@ public class EndpointsAsyncTask extends AsyncTask<Pair<Context, String>, Void, S
     }
 
     @Override
-    protected String doInBackground(Pair<Context, String>... params) {
+    protected String doInBackground(Void...param) {
         EspressoIdlingResource.increment();
         if (myApiService == null) {  // Only do this once
             MyApi.Builder builder = new MyApi.Builder(AndroidHttp.newCompatibleTransport(),
@@ -60,13 +60,13 @@ public class EndpointsAsyncTask extends AsyncTask<Pair<Context, String>, Void, S
             myApiService = builder.build();
         }
 
-        context = params[0].first;
-        String name = params[0].second;
+
 
         try {
-            return myApiService.sayHi(name).execute().getData();
+            return myApiService.sayJoke().execute().getData();
         } catch (IOException e) {
-            return e.getMessage();
+            Log.e(TAG, "doInBackground: "+ e.getMessage());
+            return "";
         }
     }
 
